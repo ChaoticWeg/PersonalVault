@@ -9,6 +9,12 @@ import java.lang.reflect.Type;
 
 public class InventoryHandler implements JsonSerializer<Inventory>, JsonDeserializer<Inventory> {
 
+    private static final int DEFAULT_INVENTORY_SIZE = 54;
+
+    static Inventory create() {
+        return Bukkit.getServer().createInventory(null, DEFAULT_INVENTORY_SIZE);
+    }
+
     private final Gson gson;
 
     InventoryHandler() {
@@ -35,12 +41,7 @@ public class InventoryHandler implements JsonSerializer<Inventory>, JsonDeserial
     @Override
     public Inventory deserialize(JsonElement elem, Type type, JsonDeserializationContext context)
             throws JsonParseException {
+        // FIXME implement - currently just creates a new one
         return create();
-    }
-
-    private static final int DEFAULT_INVENTORY_SIZE = 54;
-
-    public static Inventory create() {
-        return Bukkit.getServer().createInventory(null, DEFAULT_INVENTORY_SIZE);
     }
 }
