@@ -30,7 +30,7 @@ public class PVIO {
     }
 
     public void initialize() {
-        logger.info("Initializing PVIO");
+        logger.fine("Initializing PVIO");
 
         if (this.inventoriesFolder.mkdirs()) {
             logger.warning("Created new inventories folder at " + this.inventoriesFolder.getAbsolutePath());
@@ -38,19 +38,20 @@ public class PVIO {
     }
 
     private Inventory initializeInventory(@NotNull OfflinePlayer player) {
-        logger.info("Initializing inventory for " + player.getName());
-
         OfflinePlayer owner = Objects.requireNonNull(player);
+
+        logger.info("Initializing inventory for " + owner.getName());
+
         Inventory result = InventoryAdapter.createInventory();
         saveInventory(result, owner);
         return result;
     }
 
     public void checkInventory(@NotNull OfflinePlayer player) {
-        logger.info("Checking that inventory exists for " + player.getName());
-
         OfflinePlayer owner = Objects.requireNonNull(player);
         File inventoryFile = this.getInventoryFile(owner);
+
+        logger.fine("Checking that inventory exists for " + owner.getName());
 
         if (!inventoryFile.exists()) {
             this.initializeInventory(owner);
@@ -58,10 +59,10 @@ public class PVIO {
     }
 
     private void saveInventory(@NotNull Inventory srcInv, @NotNull OfflinePlayer player) {
-        logger.info("Saving inventory for " + player.getName());
-
         Inventory src = Objects.requireNonNull(srcInv);
         OfflinePlayer owner = Objects.requireNonNull(player);
+
+        logger.fine("Saving inventory for " + owner.getName());
 
         File dataFile = this.getInventoryFile(owner);
 
@@ -81,7 +82,7 @@ public class PVIO {
         OfflinePlayer owner = Objects.requireNonNull(player);
         this.checkInventory(owner);
 
-        logger.info("Loading inventory for " + owner.getName());
+        logger.fine("Loading inventory for " + owner.getName());
 
         File dataFile = this.getInventoryFile(owner);
         try (FileReader in = new FileReader(dataFile)) {
