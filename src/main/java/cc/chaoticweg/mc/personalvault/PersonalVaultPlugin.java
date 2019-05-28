@@ -3,6 +3,7 @@ package cc.chaoticweg.mc.personalvault;
 import cc.chaoticweg.mc.personalvault.commands.VaultAccessCommand;
 import cc.chaoticweg.mc.personalvault.events.InventoryCloseListener;
 import cc.chaoticweg.mc.personalvault.events.PlayerLoginListener;
+import cc.chaoticweg.mc.personalvault.events.PlayerQuitListener;
 import cc.chaoticweg.mc.personalvault.serialization.PVIO;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +38,7 @@ public class PersonalVaultPlugin extends JavaPlugin {
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(new PlayerLoginListener(this.vaults), this);
         this.getServer().getPluginManager().registerEvents(new InventoryCloseListener(this.vaults), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerQuitListener(this.vaults), this);
 
         Objects.requireNonNull(this.getCommand("pv")).setExecutor(new VaultAccessCommand(this.vaults));
     }
