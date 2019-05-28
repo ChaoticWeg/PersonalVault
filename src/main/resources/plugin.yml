@@ -6,3 +6,20 @@ version: 1.0-SNAPSHOT
 author: ChaoticWeg
 
 description: Provides a personal vault that can be accessed from anywhere.
+
+commands:
+    pv:
+        description: Access your personal vault
+        aliases: [ "personalvault" ]
+        usage: "Usage: /<alias>"
+        permission: pv.access
+
+permissions:
+    pv.access:
+        description: Access your personal vault via /pv
+        default: true
+    pv.*:
+        description: PV wildcard permission. Gives all PV permissions.
+        default: op
+        children:
+            pv.access: true
