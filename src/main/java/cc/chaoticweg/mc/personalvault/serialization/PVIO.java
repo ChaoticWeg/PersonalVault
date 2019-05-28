@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class PVIO {
@@ -43,13 +44,13 @@ public class PVIO {
         logger.info("Initializing inventory for " + owner.getName());
 
         Inventory result = InventoryAdapter.createInventory();
-        saveInventory(result, owner);
+        saveInventory(owner, result);
         return result;
     }
 
-    public void checkInventory(@NotNull OfflinePlayer player) {
+    private void checkInventory(@NotNull OfflinePlayer player) {
         OfflinePlayer owner = Objects.requireNonNull(player);
-        File inventoryFile = this.getInventoryFile(owner);
+        File inventoryFile = this.getInventoryFile(owner.getUniqueId());
 
         logger.fine("Checking that inventory exists for " + owner.getName());
 
@@ -58,24 +59,27 @@ public class PVIO {
         }
     }
 
-    private void saveInventory(@NotNull Inventory srcInv, @NotNull OfflinePlayer player) {
-        Inventory src = Objects.requireNonNull(srcInv);
-        OfflinePlayer owner = Objects.requireNonNull(player);
+    public void saveInventory(@NotNull UUID nnUuid, @NotNull Inventory src) {
+        Inventory inv = Objects.requireNonNull(src);
+        UUID uuid = Objects.requireNonNull(nnUuid);
 
-        logger.fine("Saving inventory for " + owner.getName());
+        File dataFile = this.getInventoryFile(uuid);
 
-        File dataFile = this.getInventoryFile(owner);
-
-        SerializableInventory inventory = new SerializableInventory(src);
+        SerializableInventory inventory = new SerializableInventory(inv);
 
         // try to write to file
         try (FileWriter out = new FileWriter(dataFile)) {
             gson.toJson(inventory, out);
         }
         catch (IOException ex) {
-            logger.severe("Unable to save inventory for " + owner.getName() + ": " + ex.getClass().getSimpleName());
             ex.printStackTrace();
         }
+    }
+
+    public void saveInventory(@NotNull OfflinePlayer player, @NotNull Inventory inv) {
+        OfflinePlayer owner = Objects.requireNonNull(player);
+        logger.fine("Saving inventory for " + owner.getName());
+        this.saveInventory(owner.getUniqueId(), Objects.requireNonNull(inv));
     }
 
     public Inventory loadInventory(@NotNull OfflinePlayer player) {
@@ -84,7 +88,7 @@ public class PVIO {
 
         logger.fine("Loading inventory for " + owner.getName());
 
-        File dataFile = this.getInventoryFile(owner);
+        File dataFile = this.getInventoryFile(owner.getUniqueId());
         try (FileReader in = new FileReader(dataFile)) {
             SerializableInventory src = gson.fromJson(in, SerializableInventory.class);
             return src.deserialize();
@@ -106,9 +110,8 @@ public class PVIO {
     }
 
     @NotNull
-    private File getInventoryFile(@NotNull OfflinePlayer player) {
-        OfflinePlayer owner = Objects.requireNonNull(player);
-        String filename = owner.getUniqueId().toString() + ".json";
+    private File getInventoryFile(@NotNull UUID uuid) {
+        String filename = Objects.requireNonNull(uuid).toString() + ".json";
         return new File(this.inventoriesFolder, filename);
     }
 
