@@ -3,10 +3,14 @@ package cc.chaoticweg.mc.personalvault.serialization.models;
 import cc.chaoticweg.mc.personalvault.serialization.InventoryAdapter;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A {@link SerializableModel} to represent an {@link Inventory}.
+ */
 public class SerializableInventory implements SerializableModel<Inventory> {
 
     private int size;
@@ -24,6 +28,7 @@ public class SerializableInventory implements SerializableModel<Inventory> {
         }
     }
 
+    @NotNull
     @Override
     public Inventory deserialize() {
         Inventory inv = InventoryAdapter.createInventory(this.size);
