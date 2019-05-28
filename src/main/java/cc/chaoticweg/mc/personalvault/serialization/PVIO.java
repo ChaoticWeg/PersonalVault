@@ -15,6 +15,9 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+/**
+ * Handles {@link File} I/O for personal vaults.
+ */
 public class PVIO {
 
     private File inventoriesFolder;
@@ -30,6 +33,9 @@ public class PVIO {
         this.gson = new GsonBuilder().create();
     }
 
+    /**
+     * Initialize the PVIO instance to ensure that the proper directory structure exists
+     */
     public void initialize() {
         logger.fine("Initializing PVIO");
 
@@ -38,6 +44,12 @@ public class PVIO {
         }
     }
 
+    /**
+     * Initialize a player's vault by creating a new one and saving it to file before returning it.
+     *
+     * @param player The player whose vault we are initializing
+     * @return An empty {@link Inventory} after it is saved to file
+     */
     private Inventory initializeInventory(@NotNull OfflinePlayer player) {
         OfflinePlayer owner = Objects.requireNonNull(player);
 
@@ -48,6 +60,11 @@ public class PVIO {
         return result;
     }
 
+    /**
+     * Check that a player's inventory exists, writing a new one to file if it does not.
+     *
+     * @param player The player for whom we are ensuring an inventory exists
+     */
     private void checkInventory(@NotNull OfflinePlayer player) {
         OfflinePlayer owner = Objects.requireNonNull(player);
         File inventoryFile = this.getInventoryFile(owner.getUniqueId());
@@ -59,13 +76,18 @@ public class PVIO {
         }
     }
 
+    /**
+     * Save an {@link Inventory} to file with path formatted as {@code <INV_DIR>/<UUID>.json}.
+     *
+     * @param nnUuid A non-null {@link UUID} for the player who owns this inventory
+     * @param src A non-null {@link Inventory} owned by the players whose UUID this is
+     */
     public void saveInventory(@NotNull UUID nnUuid, @NotNull Inventory src) {
         Inventory inv = Objects.requireNonNull(src);
         UUID uuid = Objects.requireNonNull(nnUuid);
 
-        File dataFile = this.getInventoryFile(uuid);
-
         SerializableInventory inventory = new SerializableInventory(inv);
+        File dataFile = this.getInventoryFile(uuid);
 
         // try to write to file
         try (FileWriter out = new FileWriter(dataFile)) {
@@ -76,12 +98,25 @@ public class PVIO {
         }
     }
 
+    /**
+     * Save an {@link Inventory} to file with path formatted as {@code <INV_DIR>/<UUID>.json}. Explicitly calls
+     * {@link PVIO#saveInventory(UUID, Inventory)} with the player's {@link UUID}.
+     *
+     * @param player The player who owns this inventory
+     * @param inv The inventory to save to the player's vault file
+     */
     public void saveInventory(@NotNull OfflinePlayer player, @NotNull Inventory inv) {
         OfflinePlayer owner = Objects.requireNonNull(player);
         logger.fine("Saving inventory for " + owner.getName());
         this.saveInventory(owner.getUniqueId(), Objects.requireNonNull(inv));
     }
 
+    /**
+     * Load the player's inventory from file.
+     *
+     * @param player The player whose inventory we are loading
+     * @return The player's saved inventory if it exists, or an empty one if it does not (or if there is any error)
+     */
     public Inventory loadInventory(@NotNull OfflinePlayer player) {
         OfflinePlayer owner = Objects.requireNonNull(player);
         this.checkInventory(owner);
@@ -105,10 +140,16 @@ public class PVIO {
         catch (Exception e) {
             logger.severe("Unable to load inventory for " + owner.getName() + ": " + e.getClass().getSimpleName());
             e.printStackTrace();
-            return null;
+            return this.initializeInventory(owner);
         }
     }
 
+    /**
+     * Get the {@link File} that should represent the inventory for the player whose UUID this is.
+     *
+     * @param uuid The {@link UUID} of the player whose file we want
+     * @return The {@link File} that represents this player's inventory
+     */
     @NotNull
     private File getInventoryFile(@NotNull UUID uuid) {
         String filename = Objects.requireNonNull(uuid).toString() + ".json";

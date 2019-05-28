@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * Listens for a player to log in and loads their vault into the VaultManager.
+ */
 public class PlayerLoginListener implements Listener {
 
     private final VaultManager vaults;

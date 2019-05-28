@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * Listens for an inventory to be closed, determines whether it's a vault, and saves it if need be.
+ */
 public class InventoryCloseListener implements Listener {
 
     private final VaultManager vaults;
