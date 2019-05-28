@@ -30,6 +30,7 @@
     </repositories>
 
     <dependencies>
+        <!-- NOTE: Gson provided by Bukkit -->
         <!-- Bukkit API -->
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -37,26 +38,36 @@
             <version>${bukkit.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- NOTE: Gson provided by Bukkit -->
+        <!-- JUnit - unit testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>buildJar</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <version>3.8.0</version>
-                        </plugin>
-                        <plugin>
-                            <artifactId>maven-jar-plugin</artifactId>
-                            <version>3.0.2</version>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
