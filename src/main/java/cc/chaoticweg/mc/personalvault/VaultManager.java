@@ -63,6 +63,16 @@ public class VaultManager {
         this.metadata.setViewing(player, false);
     }
 
+    public void dispose(@NotNull Player player) {
+        UUID uuid = Objects.requireNonNull(player).getUniqueId();
+
+        if (this.vaults.containsKey(uuid)) {
+            Inventory vault = this.vaults.get(uuid);
+            this.pvio.saveInventory(player, vault);
+            this.vaults.remove(uuid);
+        }
+    }
+
     public boolean isViewing(@NotNull Player player) {
         return this.metadata.isViewing(Objects.requireNonNull(player));
     }
