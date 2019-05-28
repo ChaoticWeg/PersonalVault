@@ -29,7 +29,7 @@ public class VaultManager {
 
     public void check(@NotNull OfflinePlayer player) {
         UUID uuid = Objects.requireNonNull(player).getUniqueId();
-        this.logger.info("Checking vault for " + player.getName());
+        this.logger.fine("Checking vault for " + player.getName());
 
         if (!this.vaults.containsKey(uuid)) {
             Inventory vault = this.pvio.loadInventory(player);
@@ -38,7 +38,7 @@ public class VaultManager {
     }
 
     private Inventory load(@NotNull OfflinePlayer player) {
-        this.logger.info("Loading vault for " + player.getName());
+        this.logger.fine("Loading vault for " + player.getName());
         this.check(player);
         return this.vaults.get(Objects.requireNonNull(player).getUniqueId());
     }
@@ -46,7 +46,7 @@ public class VaultManager {
     private void save(@NotNull OfflinePlayer player, @NotNull Inventory src) {
         UUID uuid = Objects.requireNonNull(player).getUniqueId();
         Inventory inv = Objects.requireNonNull(src);
-        this.logger.info("Saving vault for " + player.getName());
+        this.logger.fine("Saving vault for " + player.getName());
 
         this.vaults.put(uuid, inv);
         this.pvio.saveInventory(player, inv);

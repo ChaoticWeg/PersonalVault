@@ -20,7 +20,7 @@ class MetadataManager {
     }
 
     void setViewing(@NotNull Player player, boolean viewing) {
-        this.logger.info("Setting " + player.getName() + " viewing metadata to " + viewing);
+        this.logger.fine("Setting " + player.getName() + " viewing metadata to " + viewing);
         player.setMetadata(VIEWING_KEY, new FixedMetadataValue(this.plugin, viewing));
     }
 
