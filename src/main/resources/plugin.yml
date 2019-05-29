@@ -9,17 +9,24 @@ description: Provides a personal vault that can be accessed from anywhere.
 
 commands:
     pv:
-        description: Access your personal vault
+        description: PersonalVault access command
         aliases: [ "personalvault" ]
-        usage: "Usage: /<alias>"
+        usage: |
+            PersonalVault commands
+            /pv
+            /pv access
         permission: pv.access
 
 permissions:
     pv.access:
-        description: Access your personal vault via /pv
+        description: Access personal vault via /pv
         default: true
+    pv.lookup:
+        description: Get the name of a user's vault file via /pv whois
+        default: op
     pv.*:
         description: PV wildcard permission. Gives all PV permissions.
         default: op
         children:
             pv.access: true
+            pv.lookup: true

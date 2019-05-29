@@ -1,7 +1,6 @@
 package cc.chaoticweg.mc.personalvault.commands;
 
 import cc.chaoticweg.mc.personalvault.VaultManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,16 +9,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class VaultAccessCommand implements CommandExecutor {
+public class VaultAccessCommand extends PersonalVaultCommand {
 
     private final VaultManager vaults;
 
-    public VaultAccessCommand(@NotNull VaultManager vaults) {
+    VaultAccessCommand(@NotNull VaultManager vaults, @NotNull PVGlobalCommand parent) {
+        super("access", parent);
         this.vaults = Objects.requireNonNull(vaults);
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender _sender, @NotNull Command command, @NotNull String alias,
+    public boolean execute(@NotNull CommandSender _sender, @NotNull Command command, @NotNull String alias,
             @NotNull String[] args) {
         CommandSender sender = Objects.requireNonNull(_sender);
 
