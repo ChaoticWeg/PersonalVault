@@ -41,7 +41,7 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T[] popFront(T[] arr) {
+    protected static <T> T[] popFront(T[] arr) {
         return arr.length < 2
                 ? (T[]) Array.newInstance(arr.getClass().getComponentType(), 0)
                 : Arrays.copyOfRange(arr, 1, arr.length);
