@@ -32,7 +32,7 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
         this.subcommands.put(Objects.requireNonNull(sub).toUpperCase(), Objects.requireNonNull(subcommand));
     }
 
-    protected CommandExecutor getSubcommand(@NotNull String sub) {
+    CommandExecutor getSubcommand(@NotNull String sub) {
         return this.subcommands.get(Objects.requireNonNull(sub.toUpperCase()));
     }
 
@@ -48,12 +48,12 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
     }
 
     @Nullable
-    public PersonalVaultCommand getParent() {
+    private PersonalVaultCommand getParent() {
         return this.parent;
     }
 
     @NotNull
-    public String getShortName() {
+    private String getShortName() {
         return this.name;
     }
 

@@ -1,7 +1,6 @@
 package cc.chaoticweg.mc.personalvault;
 
 import cc.chaoticweg.mc.personalvault.commands.PVGlobalCommand;
-import cc.chaoticweg.mc.personalvault.commands.VaultAccessCommand;
 import cc.chaoticweg.mc.personalvault.events.InventoryCloseListener;
 import cc.chaoticweg.mc.personalvault.events.PlayerLoginListener;
 import cc.chaoticweg.mc.personalvault.events.PlayerQuitListener;
@@ -17,7 +16,6 @@ public class PersonalVaultPlugin extends JavaPlugin {
     private final Logger logger;
     private final PVIO pvio;
 
-    @SuppressWarnings("FieldCanBeLocal")
     private final MetadataManager metadata;
     private final VaultManager vaults;
 
@@ -54,8 +52,14 @@ public class PersonalVaultPlugin extends JavaPlugin {
     }
 
     @NotNull
-    public VaultManager getVaults() {
+    public VaultManager getVaultManager() {
         return this.vaults;
+    }
+
+    @SuppressWarnings("unused")
+    @NotNull
+    public MetadataManager getMetadataManager() {
+        return this.metadata;
     }
 
 }
