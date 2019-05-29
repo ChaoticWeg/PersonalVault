@@ -14,12 +14,13 @@ public class PVGlobalCommand extends PersonalVaultCommand {
 
         PersonalVaultPlugin pluginSafe = Objects.requireNonNull(plugin);
         this.registerSubcommand(new VaultAccessCommand(pluginSafe.getVaultManager(), this));
+        this.registerSubcommand(new VaultLookupCommand(pluginSafe.getVaultManager(), this));
     }
 
     @Override
     protected boolean execute(@NotNull CommandSender s, @NotNull Command c, @NotNull String n, @NotNull String[] a) {
         if (a.length == 0) {
-            return this.getSubcommand("access").onCommand(s, c, n, a);
+            return this.getSubcommand("access").onCommand(s, c, n, popFront(a));
         }
 
         return false;
