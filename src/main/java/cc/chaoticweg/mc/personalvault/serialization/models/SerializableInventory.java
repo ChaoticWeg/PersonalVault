@@ -33,7 +33,7 @@ public class SerializableInventory implements SerializableModel<Inventory> {
     public Inventory deserialize() {
         Inventory inv = InventoryAdapter.createInventory(this.size);
         for (SerializableInventorySlot slot : this.slots) {
-            inv.setItem(slot.slotNumber, slot.item.deserialize());
+            inv.setItem(slot.slotNumber, ItemStack.deserialize(slot.item));
         }
         return inv;
     }

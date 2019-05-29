@@ -2,6 +2,8 @@ package cc.chaoticweg.mc.personalvault.serialization.models;
 
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 /**
  * A serializable inventory slot. Note that this model does not represent any Bukkit class, but rather is a
  * convenience model created to represent a non-empty inventory slot.
@@ -9,11 +11,11 @@ import org.bukkit.inventory.ItemStack;
 class SerializableInventorySlot {
 
     int slotNumber;
-    SerializableItemStack item;
+    Map<String, Object> item;
 
     SerializableInventorySlot(int slotNumber, ItemStack item) {
         this.slotNumber = slotNumber;
-        this.item = SerializableItemStack.serialize(item);
+        this.item = item.serialize();
     }
 
 }
