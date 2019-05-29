@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>PersonalVault</name>
-    <url>https://chaoticweg.cc</url>
+    <url>https://github.com/ChaoticWeg/PersonalVault</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
