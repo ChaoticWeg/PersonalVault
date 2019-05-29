@@ -11,6 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * Look up a player's vault file by their name.
+ *
+ * /pv whois [name]
+ */
 public class VaultLookupCommand extends PersonalVaultCommand {
 
     private final VaultManager vaults;
@@ -21,8 +26,7 @@ public class VaultLookupCommand extends PersonalVaultCommand {
     }
 
     @Override
-    protected boolean execute(@NotNull CommandSender s, @NotNull Command c, @NotNull String n,
-            @NotNull String[] a) {
+    protected boolean execute(@NotNull CommandSender s, @NotNull Command c, @NotNull String n, @NotNull String[] a) {
         if (a.length > 1) {
             return false;
         }
