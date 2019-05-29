@@ -128,4 +128,16 @@ public class VaultManager {
         }
     }
 
+    /**
+     * Get the name of the vault file for this player - vault files are UUID + .json
+     *
+     * @param player The player whose vault file we want
+     * @return The filename
+     */
+    @NotNull
+    public String lookupFilename(@NotNull OfflinePlayer player) {
+        OfflinePlayer owner = Objects.requireNonNull(player);
+        return owner.getUniqueId().toString() + ".json";
+    }
+
 }
