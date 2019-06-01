@@ -71,7 +71,7 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
         return String.join(" ", stack);
     }
 
-    protected abstract boolean execute(@NotNull CommandSender s, @NotNull Command c, @NotNull String n,
+    abstract boolean execute(@NotNull PVCommandUser s, @NotNull Command c, @NotNull String n,
             @NotNull String[] a);
 
     @Override
@@ -80,11 +80,16 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
             return this.getSubcommand(a[0]).onCommand(s, c, n, popFront(a));
         }
 
-        return this.execute(s, c, n, a);
+        return this.execute(new PVCommandUser(s), c, n, a);
     }
 
-    boolean errorNoPermissions(@NotNull CommandSender s) {
-        s.sendMessage(ChatColor.RED + "You don't have permission to do that." + ChatColor.RESET);
+    boolean errorNoPermissions(@NotNull PVCommandUser s) {
+        s.sendError("You don't have permission to do that.");
+        return true;
+    }
+
+    boolean errorNoConsole(@NotNull PVCommandUser s) {
+        s.sendError("Console can't do that.");
         return true;
     }
 }

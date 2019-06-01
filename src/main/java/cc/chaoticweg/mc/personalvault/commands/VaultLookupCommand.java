@@ -4,8 +4,6 @@ import cc.chaoticweg.mc.personalvault.VaultManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,20 +24,25 @@ public class VaultLookupCommand extends PersonalVaultCommand {
     }
 
     @Override
-    protected boolean execute(@NotNull CommandSender s, @NotNull Command c, @NotNull String n, @NotNull String[] a) {
+    protected boolean execute(@NotNull PVCommandUser s, @NotNull Command c, @NotNull String n, @NotNull String[] a) {
         if (a.length > 1) {
             return false;
+        }
+
+        if (s.isPlayer() && !s.getCommandSender().hasPermission("pv.lookup")) {
+            return this.errorNoPermissions(s);
         }
 
         String playerName;
 
         if (a.length < 1) {
-            if (!(s instanceof Player)) {
+            if (!s.isPlayer()) {
+                // console can't have a vault, lookup self makes no sense
                 s.sendMessage("Usage: /pv whois [name] - Lookup vault file by player name");
                 return true;
             }
 
-            playerName = s.getName();
+            playerName = s.getAsPlayer().getName();
         }
 
         else {
@@ -48,7 +51,7 @@ public class VaultLookupCommand extends PersonalVaultCommand {
 
         OfflinePlayer player = this.lookupPlayerByName(playerName);
         if (player == null) {
-            s.sendMessage("Player not found: " + playerName);
+            s.sendError("Player not found: " + playerName);
             return true;
         }
 
