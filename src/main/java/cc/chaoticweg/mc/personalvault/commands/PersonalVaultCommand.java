@@ -1,5 +1,6 @@
 package cc.chaoticweg.mc.personalvault.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,7 +42,7 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
     }
 
     @SuppressWarnings("unchecked")
-    protected static <T> T[] popFront(T[] arr) {
+    static <T> T[] popFront(T[] arr) {
         return arr.length < 2
                 ? (T[]) Array.newInstance(arr.getClass().getComponentType(), 0)
                 : Arrays.copyOfRange(arr, 1, arr.length);
@@ -80,5 +81,10 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
         }
 
         return this.execute(s, c, n, a);
+    }
+
+    boolean errorNoPermissions(@NotNull CommandSender s) {
+        s.sendMessage(ChatColor.RED + "You don't have permission to do that." + ChatColor.RESET);
+        return true;
     }
 }
