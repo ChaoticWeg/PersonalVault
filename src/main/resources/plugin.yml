@@ -18,15 +18,31 @@ commands:
         permission: pv.access
 
 permissions:
-    pv.access:
-        description: Access personal vault via /pv
+
+    # Access permissions
+    pv.access.self:
+        description: Access own personal vault
         default: true
+    pv.access.other:
+        description: Access someone else's personal vault
+        default: op
+    # Access wildcard
+    pv.access.*:
+        description: Access everyone's personal vaults
+        default: op
+        children:
+            pv.access.self: true
+            pv.access.other: true
+
+    # Miscellaneous permissions
     pv.lookup:
         description: Get the name of a user's vault file via /pv whois
         default: op
+
+    # The Big Daddy permission
     pv.*:
         description: PV wildcard permission. Gives all PV permissions.
         default: op
         children:
-            pv.access: true
+            pv.access.*: true
             pv.lookup: true
