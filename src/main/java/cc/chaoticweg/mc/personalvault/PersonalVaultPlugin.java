@@ -16,7 +16,6 @@ public class PersonalVaultPlugin extends JavaPlugin {
     private final Logger logger;
     private final PVIO pvio;
 
-    private final MetadataManager metadata;
     private final VaultManager vaults;
 
     public PersonalVaultPlugin() {
@@ -24,9 +23,7 @@ public class PersonalVaultPlugin extends JavaPlugin {
 
         this.logger = this.getLogger();
         this.pvio = new PVIO(this.getDataFolder(), this.getLogger());
-
-        this.metadata = new MetadataManager(this);
-        this.vaults = new VaultManager(this.pvio, this.metadata);
+        this.vaults = new VaultManager(this.pvio, new MetadataManager(this));
     }
 
     @Override
@@ -45,21 +42,9 @@ public class PersonalVaultPlugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("pv")).setExecutor(new PVGlobalCommand(this));
     }
 
-    @Override
-    public void onDisable() {
-        this.logger.info("Saving all vaults");
-        this.vaults.saveAll();
-    }
-
     @NotNull
     public VaultManager getVaultManager() {
         return this.vaults;
-    }
-
-    @SuppressWarnings("unused")
-    @NotNull
-    public MetadataManager getMetadataManager() {
-        return this.metadata;
     }
 
 }
