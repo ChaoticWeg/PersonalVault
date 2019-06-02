@@ -29,7 +29,7 @@ class MetadataManager {
      * @param viewing Whether the player is viewing their vault
      */
     void setViewing(@NotNull Player player, boolean viewing) {
-        this.logger.fine("Setting " + player.getName() + " viewing metadata to " + viewing);
+        this.logger.info("Setting " + player.getName() + " viewing metadata to " + viewing);
         player.setMetadata(VIEWING_KEY, new FixedMetadataValue(this.plugin, viewing));
     }
 
@@ -40,6 +40,7 @@ class MetadataManager {
      * @return Whether the player is viewing their vault
      */
     boolean isViewing(@NotNull Player player) {
+        this.logger.info("Checking viewing metadata for player " + player.getName());
         return player.hasMetadata(VIEWING_KEY) && player.getMetadata(VIEWING_KEY).get(0).asBoolean();
     }
 
