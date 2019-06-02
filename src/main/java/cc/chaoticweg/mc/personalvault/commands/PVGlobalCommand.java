@@ -14,6 +14,7 @@ public class PVGlobalCommand extends PersonalVaultCommand {
 
         PersonalVaultPlugin pluginSafe = Objects.requireNonNull(plugin);
         this.registerSubcommand(new VaultAccessCommand(pluginSafe.getVaultManager(), this));
+        this.registerSubcommand(new IsViewingCommand(pluginSafe.getVaultManager(), this));
     }
 
     @Override
