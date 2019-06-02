@@ -23,14 +23,23 @@ class MetadataManager {
     }
 
     /**
-     * Set a metadata flag that represents whether a player is viewing their vault currently.
+     * Set a metadata flag that represents that a player is currently viewing their PV.
      *
      * @param player The player whose metadata we are setting
-     * @param viewing Whether the player is viewing their vault
      */
-    void setViewing(@NotNull Player player, boolean viewing) {
-        this.logger.info("Setting " + player.getName() + " viewing metadata to " + viewing);
-        player.setMetadata(VIEWING_KEY, new FixedMetadataValue(this.plugin, viewing));
+    void setViewing(@NotNull Player player) {
+        this.logger.info("Setting " + player.getName() + " viewing metadata");
+        player.setMetadata(VIEWING_KEY, new FixedMetadataValue(this.plugin, true));
+    }
+
+    /**
+     * Remove the "viewing" metadata flag.
+     *
+     * @param player The player whose metadata we are setting
+     */
+    void removeViewing(@NotNull Player player) {
+        this.logger.info("Removing " + player.getName() + " viewing metadata");
+        player.removeMetadata(VIEWING_KEY, this.plugin);
     }
 
     /**
@@ -41,7 +50,7 @@ class MetadataManager {
      */
     boolean isViewing(@NotNull Player player) {
         this.logger.info("Checking viewing metadata for player " + player.getName());
-        return player.hasMetadata(VIEWING_KEY) && player.getMetadata(VIEWING_KEY).get(0).asBoolean();
+        return player.hasMetadata(VIEWING_KEY);
     }
 
 }

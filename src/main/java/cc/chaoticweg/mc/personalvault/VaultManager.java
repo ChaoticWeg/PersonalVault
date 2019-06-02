@@ -55,7 +55,7 @@ public class VaultManager {
     public void open(@NotNull Player player) {
         Inventory vault = this.get(Objects.requireNonNull(player));
         player.openInventory(vault);
-        this.metadata.setViewing(player, true);
+        this.metadata.setViewing(player);
     }
 
     /**
@@ -66,7 +66,7 @@ public class VaultManager {
      */
     public void close(@NotNull Player player, @NotNull Inventory inv) {
         this.save(player, inv);
-        this.metadata.setViewing(player, false);
+        this.metadata.removeViewing(player);
     }
 
     /**
