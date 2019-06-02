@@ -23,12 +23,13 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         CommandSender sender = Objects.requireNonNull(_sender);
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use /" + alias);
+            sender.sendMessage("Only players can access vaults");
             return true;
         }
 
         if (args.length > 0) {
-            return sendUsage(sender, alias, command.getUsage());
+            sender.sendMessage("Usage: /pv access");
+            return true;
         }
 
         Player player = (Player) sender;
@@ -38,11 +39,6 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         }
 
         this.vaults.open(player);
-        return true;
-    }
-
-    private boolean sendUsage(@NotNull CommandSender sender, @NotNull String alias, @NotNull String usage) {
-        sender.sendMessage(usage.replace("<alias>", alias));
         return true;
     }
 
