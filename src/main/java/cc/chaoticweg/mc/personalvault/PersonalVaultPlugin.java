@@ -38,7 +38,7 @@ public class PersonalVaultPlugin extends JavaPlugin {
     public void onEnable() {
         // register events
         this.getServer().getPluginManager().registerEvents(new PlayerLoginListener(this.vaults), this);
-        this.getServer().getPluginManager().registerEvents(new InventoryCloseListener(this.vaults), this);
+        this.getServer().getPluginManager().registerEvents(new InventoryCloseListener(this.vaults, this.logger), this);
         this.getServer().getPluginManager().registerEvents(new PlayerQuitListener(this.vaults), this);
 
         // register command

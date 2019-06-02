@@ -8,8 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * Listens for an inventory to be closed, determines whether it's a vault, and saves it if need be.
@@ -17,9 +19,11 @@ import java.util.Objects;
 public class InventoryCloseListener implements Listener {
 
     private final VaultManager vaults;
+    private final Logger logger;
 
-    public InventoryCloseListener(@NotNull VaultManager vaults) {
+    public InventoryCloseListener(@NotNull VaultManager vaults, @Nullable Logger logger) {
         this.vaults = Objects.requireNonNull(vaults);
+        this.logger = logger != null ? logger : Logger.getLogger("PV");
     }
 
     @EventHandler
@@ -31,8 +35,11 @@ public class InventoryCloseListener implements Listener {
         }
 
         Player player = (Player) human;
+        this.logger.info(String.format("%s is closing an inventory", player.getName()));
+
         if (!this.vaults.isViewing(player)) {
-            // the player is not viewing their vault, ignore
+            this.logger.info(String.format("%s is not viewing an inventory (per metadata?), ignoring event",
+                    player.getName()));
             return;
         }
 
