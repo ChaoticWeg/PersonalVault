@@ -3,6 +3,7 @@ package cc.chaoticweg.mc.personalvault.serialization;
 import cc.chaoticweg.mc.personalvault.serialization.models.SerializableInventory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -132,7 +133,7 @@ public class PVIO {
 
         // we shouldn't catch any NPEs because they are handled down the chain
         // who knows though, my code is shit
-        catch (NullPointerException e) {
+        catch (NullPointerException | JsonIOException e) {
             logger.warning("Inventory for " + owner.getName() + " is corrupt, creating a new one");
             return this.initializeInventory(owner);
         }
