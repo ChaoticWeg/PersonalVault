@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -82,7 +81,7 @@ public class PVIO {
      * @param nnUuid A non-null {@link UUID} for the player who owns this inventory
      * @param src A non-null {@link Inventory} owned by the players whose UUID this is
      */
-    public void saveInventory(@NotNull UUID nnUuid, @NotNull Inventory src) {
+    private void saveInventory(@NotNull UUID nnUuid, @NotNull Inventory src) {
         Inventory inv = Objects.requireNonNull(src);
         UUID uuid = Objects.requireNonNull(nnUuid);
 
@@ -91,10 +90,12 @@ public class PVIO {
 
         // try to write to file
         try (FileWriter out = new FileWriter(dataFile)) {
-            gson.toJson(inventory, out);
+            String json = gson.toJson(inventory);
+            out.write(json);
         }
-        catch (IOException ex) {
-            ex.printStackTrace();
+        catch (Exception ex) {
+            this.logger.severe(String.format("Unable to save vault %s to file (%s): %s", uuid,
+                    ex.getClass().getSimpleName(), ex.getMessage()));
         }
     }
 
@@ -107,7 +108,7 @@ public class PVIO {
      */
     public void saveInventory(@NotNull OfflinePlayer player, @NotNull Inventory inv) {
         OfflinePlayer owner = Objects.requireNonNull(player);
-        logger.fine("Saving inventory for " + owner.getName());
+        logger.fine("Saving vault for " + owner.getName());
         this.saveInventory(owner.getUniqueId(), Objects.requireNonNull(inv));
     }
 
