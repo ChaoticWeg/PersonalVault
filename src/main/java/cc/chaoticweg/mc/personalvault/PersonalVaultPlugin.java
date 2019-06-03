@@ -2,8 +2,6 @@ package cc.chaoticweg.mc.personalvault;
 
 import cc.chaoticweg.mc.personalvault.commands.PVGlobalCommand;
 import cc.chaoticweg.mc.personalvault.events.InventoryCloseListener;
-import cc.chaoticweg.mc.personalvault.events.PlayerLoginListener;
-import cc.chaoticweg.mc.personalvault.events.PlayerQuitListener;
 import cc.chaoticweg.mc.personalvault.serialization.PVIO;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +32,7 @@ public class PersonalVaultPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // register events
-        this.getServer().getPluginManager().registerEvents(new PlayerLoginListener(this.vaults), this);
         this.getServer().getPluginManager().registerEvents(new InventoryCloseListener(this.vaults, this.logger), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerQuitListener(this.vaults), this);
 
         // register command
         Objects.requireNonNull(this.getCommand("pv")).setExecutor(new PVGlobalCommand(this));
