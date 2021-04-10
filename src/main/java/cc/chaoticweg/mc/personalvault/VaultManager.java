@@ -20,10 +20,12 @@ public class VaultManager {
     private final ConcurrentHashMap<UUID, Inventory> vaults = new ConcurrentHashMap<>();
     private final Logger logger = Bukkit.getLogger();
 
+    private final PersonalVaultPlugin plugin;
     private final MetadataManager metadata;
     private final PVIO pvio;
 
-    VaultManager(@NotNull PVIO io, @NotNull MetadataManager metadata) {
+    VaultManager(@NotNull PersonalVaultPlugin plugin, @NotNull PVIO io, @NotNull MetadataManager metadata) {
+        this.plugin = Objects.requireNonNull(plugin);
         this.pvio = Objects.requireNonNull(io);
         this.metadata = Objects.requireNonNull(metadata);
     }
@@ -79,7 +81,7 @@ public class VaultManager {
     public void open(@NotNull Player player, @NotNull OfflinePlayer target) {
         Inventory vault = this.get(Objects.requireNonNull(target));
         player.openInventory(vault);
-        this.metadata.setViewing(player, true);
+        this.metadata.setViewing(player, target);
     }
 
     /**
@@ -98,8 +100,10 @@ public class VaultManager {
      * @param inv The inventory to save
      */
     public void close(@NotNull Player player, @NotNull Inventory inv) {
-        this.save(player, inv);
-        this.metadata.setViewing(player, false);
+        UUID targetUuid = this.metadata.getViewingTarget(player);
+        OfflinePlayer target = this.plugin.getServer().getOfflinePlayer(targetUuid);
+        this.save(target, inv);
+        this.metadata.setNotViewing(player);
     }
 
     /**
