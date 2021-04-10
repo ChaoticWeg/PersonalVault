@@ -10,10 +10,10 @@ import java.util.Objects;
 public class PVGlobalCommand extends PersonalVaultCommand {
 
     public PVGlobalCommand(@NotNull PersonalVaultPlugin plugin) {
-        super("pv", null);
+        super(plugin, "pv", null);
 
         PersonalVaultPlugin pluginSafe = Objects.requireNonNull(plugin);
-        this.registerSubcommand(new VaultAccessCommand(pluginSafe.getVaultManager(), this));
+        this.registerSubcommand(new VaultAccessCommand(plugin, pluginSafe.getVaultManager(), this));
     }
 
     @Override
