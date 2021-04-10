@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -70,14 +71,24 @@ public class VaultManager {
     }
 
     /**
+     * Loads a player's vault and opens it for the command sender.
+     *
+     * @param player The player who will be shown the vault
+     * @param target The player whose inventory will be shown
+     */
+    public void open(@NotNull Player player, @NotNull OfflinePlayer target) {
+        Inventory vault = this.get(Objects.requireNonNull(target));
+        player.openInventory(vault);
+        this.metadata.setViewing(player, true);
+    }
+
+    /**
      * Loads the player's vault and opens it for them.
      *
      * @param player The player whose vault we will open
      */
     public void open(@NotNull Player player) {
-        Inventory vault = this.get(Objects.requireNonNull(player));
-        player.openInventory(vault);
-        this.metadata.setViewing(player, true);
+        this.open(player, player);
     }
 
     /**

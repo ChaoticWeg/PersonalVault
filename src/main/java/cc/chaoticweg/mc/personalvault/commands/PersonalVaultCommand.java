@@ -1,5 +1,6 @@
 package cc.chaoticweg.mc.personalvault.commands;
 
+import cc.chaoticweg.mc.personalvault.PersonalVaultPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,12 +15,14 @@ import java.util.Objects;
 
 public abstract class PersonalVaultCommand implements CommandExecutor {
 
-    private HashMap<String, CommandExecutor> subcommands = new HashMap<>();
+    private final HashMap<String, CommandExecutor> subcommands = new HashMap<>();
 
-    private PersonalVaultCommand parent;
-    private String name;
+    private final PersonalVaultPlugin plugin;
+    private final PersonalVaultCommand parent;
+    private final String name;
 
-    PersonalVaultCommand(@NotNull String name, @Nullable PersonalVaultCommand parent) {
+    PersonalVaultCommand(@NotNull PersonalVaultPlugin plugin, @NotNull String name, @Nullable PersonalVaultCommand parent) {
+        this.plugin = Objects.requireNonNull(plugin);
         this.name = Objects.requireNonNull(name);
         this.parent = parent;
     }
@@ -58,6 +61,11 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
     }
 
     @NotNull
+    protected PersonalVaultPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    @NotNull
     public String getLongName() {
         ArrayList<String> stack = new ArrayList<>();
 
@@ -71,7 +79,7 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
     }
 
     protected abstract boolean execute(@NotNull CommandSender s, @NotNull Command c, @NotNull String n,
-            @NotNull String[] a);
+                                       @NotNull String[] a);
 
     @Override
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command c, @NotNull String n, @NotNull String[] a) {

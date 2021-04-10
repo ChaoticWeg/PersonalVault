@@ -21,6 +21,9 @@ permissions:
     pv.access:
         description: Access personal vault via /pv
         default: true
+    pv.admin:
+        description: Access other players' vaults via /pv
+        default: op
     pv.lookup:
         description: Get the name of a user's vault file via /pv whois
         default: op
@@ -30,3 +33,4 @@ permissions:
         children:
             pv.access: true
             pv.lookup: true
+            pv.admin: true
