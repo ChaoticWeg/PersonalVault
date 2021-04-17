@@ -20,10 +20,10 @@ import java.util.logging.Logger;
  */
 public class PVIO {
 
-    private File inventoriesFolder;
+    private final File inventoriesFolder;
 
-    private Logger logger;
-    private Gson gson;
+    private final Logger logger;
+    private final Gson gson;
 
     public PVIO(@NotNull File pluginDataFolder, @NotNull Logger pluginLogger) {
         File dataFolder = Objects.requireNonNull(pluginDataFolder);
@@ -85,13 +85,12 @@ public class PVIO {
     public void saveInventory(@NotNull UUID nnUuid, @NotNull Inventory src) {
         Inventory inv = Objects.requireNonNull(src);
         UUID uuid = Objects.requireNonNull(nnUuid);
-
-        SerializableInventory inventory = new SerializableInventory(inv);
         File dataFile = this.getInventoryFile(uuid);
 
-        // try to write to file
+        // try to serialize and write to file
         try (FileWriter out = new FileWriter(dataFile)) {
-            gson.toJson(inventory, out);
+            SerializableInventory inventory = new SerializableInventory(inv);
+            gson.toJson(inventory, SerializableInventory.class, out);
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -152,7 +151,7 @@ public class PVIO {
      */
     @NotNull
     private File getInventoryFile(@NotNull UUID uuid) {
-        String filename = Objects.requireNonNull(uuid).toString() + ".json";
+        String filename = Objects.requireNonNull(uuid) + ".json";
         return new File(this.inventoriesFolder, filename);
     }
 

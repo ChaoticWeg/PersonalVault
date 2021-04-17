@@ -1,6 +1,7 @@
 package cc.chaoticweg.mc.personalvault.events;
 
 import cc.chaoticweg.mc.personalvault.VaultManager;
+import org.bukkit.GameMode;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,6 +34,11 @@ public class InventoryCloseListener implements Listener {
         Player player = (Player) human;
         if (!this.vaults.isViewing(player)) {
             // the player is not viewing their vault, ignore
+            return;
+        }
+
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            // the player is in creative mode, trying to save this inventory will break it
             return;
         }
 

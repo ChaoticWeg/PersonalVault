@@ -2,6 +2,8 @@ package cc.chaoticweg.mc.personalvault.commands;
 
 import cc.chaoticweg.mc.personalvault.PersonalVaultPlugin;
 import cc.chaoticweg.mc.personalvault.VaultManager;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,7 +40,14 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         // Check that the sender has permission to access vaults
         Player player = (Player) sender;
         if (!player.hasPermission("pv.access")) {
-            player.sendMessage("You don't have permission to access any vaults.");
+            player.sendMessage(ChatColor.RED + "[PV] You don't have permission to access any vaults." + ChatColor.RESET);
+            return true;
+        }
+
+        // Check that the player is not in creative mode, which seems to break something.
+        // TODO look into why creative mode seems to break PV
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            player.sendMessage(ChatColor.RED + "[PV] /pv is not available in creative mode." + ChatColor.RESET);
             return true;
         }
 

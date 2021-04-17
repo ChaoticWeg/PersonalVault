@@ -1,6 +1,8 @@
 package cc.chaoticweg.mc.personalvault.serialization.models;
 
 import cc.chaoticweg.mc.personalvault.serialization.InventoryAdapter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +15,13 @@ import java.util.List;
  */
 public class SerializableInventory implements SerializableModel<Inventory> {
 
-    private int size;
-    private List<SerializableInventorySlot> slots;
+    @SerializedName("size")
+    @Expose
+    private final Integer size;
+
+    @SerializedName("slots")
+    @Expose
+    private final List<SerializableInventorySlot> slots;
 
     public SerializableInventory(Inventory inv) {
         this.size = inv.getSize();

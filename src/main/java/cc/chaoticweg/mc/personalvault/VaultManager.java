@@ -3,8 +3,11 @@ package cc.chaoticweg.mc.personalvault;
 import cc.chaoticweg.mc.personalvault.serialization.PVIO;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.data.type.Lectern;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,8 +82,15 @@ public class VaultManager {
      * @param target The player whose inventory will be shown
      */
     public void open(@NotNull Player player, @NotNull OfflinePlayer target) {
+        Inventory openableInventory = this.plugin.getServer().createInventory(player, InventoryType.PLAYER);
         Inventory vault = this.get(Objects.requireNonNull(target));
-        player.openInventory(vault);
+
+        openableInventory.clear();
+        for (ItemStack stack : vault.getContents()) {
+            openableInventory.addItem(stack);
+        }
+
+        player.openInventory(openableInventory);
         this.metadata.setViewing(player, target);
     }
 

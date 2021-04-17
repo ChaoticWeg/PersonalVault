@@ -1,5 +1,7 @@
 package cc.chaoticweg.mc.personalvault.serialization.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -10,7 +12,12 @@ import java.util.Map;
  */
 class SerializableInventorySlot {
 
-    int slotNumber;
+    @SerializedName("slotNumber")
+    @Expose
+    Integer slotNumber;
+
+    @SerializedName("slot")
+    @Expose
     Map<String, Object> item;
 
     SerializableInventorySlot(int slotNumber, ItemStack item) {
