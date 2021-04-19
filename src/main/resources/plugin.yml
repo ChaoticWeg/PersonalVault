@@ -2,7 +2,7 @@ main: cc.chaoticweg.mc.personalvault.PersonalVaultPlugin
 prefix: PV
 
 name: PersonalVault
-version: 1.2.0
+version: 1.2.0.beta-2
 author: ChaoticWeg
 api-version: 1.16
 
