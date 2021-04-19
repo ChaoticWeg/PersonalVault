@@ -1,7 +1,6 @@
 package cc.chaoticweg.mc.personalvault.serialization;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryType;
+import cc.chaoticweg.mc.personalvault.util.InventoryUtils;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -18,8 +17,9 @@ public final class Base64 {
         try (ByteArrayOutputStream byteOutStr = new ByteArrayOutputStream()) {
             BukkitObjectOutputStream objOutStr = new BukkitObjectOutputStream(byteOutStr);
 
-            for (int i = 0; i < inventory.getSize(); i++) {
-                ItemStack stack = inventory.getItem(i);
+            ItemStack[] contents = inventory.getContents();
+            for (int i = 0; i < contents.length; i++) {
+                ItemStack stack = contents[i];
                 if (stack != null) {
                     objOutStr.writeInt(i);
                     objOutStr.writeObject(stack);
@@ -36,13 +36,13 @@ public final class Base64 {
     public static Inventory deserializeInventory(String data) throws IOException {
         try (ByteArrayInputStream byteInStr = new ByteArrayInputStream(Base64Coder.decodeLines(data))) {
             BukkitObjectInputStream objInStr = new BukkitObjectInputStream(byteInStr);
-            Inventory inventory = Bukkit.getServer().createInventory(null, InventoryType.CHEST);
+            Inventory inventory = InventoryUtils.createInventory();
 
             while (objInStr.available() > 0) {
-                int index = objInStr.readInt();
+                int slot = objInStr.readInt();
                 ItemStack stack = (ItemStack) objInStr.readObject();
-                if (stack != null) {
-                    inventory.setItem(index, stack);
+                if (stack != null && slot < inventory.getSize()) {
+                    inventory.setItem(slot, stack);
                 }
             }
 

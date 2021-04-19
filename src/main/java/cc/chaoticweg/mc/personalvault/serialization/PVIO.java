@@ -1,8 +1,7 @@
 package cc.chaoticweg.mc.personalvault.serialization;
 
-import org.bukkit.Bukkit;
+import cc.chaoticweg.mc.personalvault.util.InventoryUtils;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +45,7 @@ public class PVIO {
 
         logger.info("Initializing inventory for " + owner.getName());
 
-        Inventory result = Bukkit.getServer().createInventory(null, InventoryType.CHEST);
+        Inventory result = InventoryUtils.createInventory();
         this.saveInventory(owner, result);
     }
 
@@ -70,7 +69,7 @@ public class PVIO {
      * Save an {@link Inventory} to file with path formatted as {@code <INV_DIR>/<UUID>.json}.
      *
      * @param nnUuid A non-null {@link UUID} for the player who owns this inventory
-     * @param src A non-null {@link Inventory} owned by the players whose UUID this is
+     * @param src    A non-null {@link Inventory} owned by the players whose UUID this is
      */
     public void saveInventory(@NotNull UUID nnUuid, @NotNull Inventory src) {
         Inventory inv = Objects.requireNonNull(src);
@@ -91,7 +90,7 @@ public class PVIO {
      * {@link PVIO#saveInventory(UUID, Inventory)} with the player's {@link UUID}.
      *
      * @param player The player who owns this inventory
-     * @param inv The inventory to save to the player's vault file
+     * @param inv    The inventory to save to the player's vault file
      */
     public void saveInventory(@NotNull OfflinePlayer player, @NotNull Inventory inv) {
         OfflinePlayer owner = Objects.requireNonNull(player);
@@ -110,7 +109,7 @@ public class PVIO {
         this.checkInventory(owner);
 
         logger.fine("Loading inventory for " + owner.getName());
-        Inventory inv = Bukkit.getServer().createInventory(null, InventoryType.CHEST);
+        Inventory inv = InventoryUtils.createInventory();
 
         try {
             File dataFile = this.getInventoryFile(owner.getUniqueId());
