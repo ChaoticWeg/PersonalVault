@@ -24,10 +24,14 @@ public class VaultManager {
     private final MetadataManager metadata;
     private final PVIO pvio;
 
-    VaultManager(@NotNull PersonalVaultPlugin plugin, @NotNull PVIO io, @NotNull MetadataManager metadata) {
+    VaultManager() {
+        this(PersonalVaultPlugin.getInstance());
+    }
+
+    VaultManager(@NotNull PersonalVaultPlugin plugin) {
         this.plugin = Objects.requireNonNull(plugin);
-        this.pvio = Objects.requireNonNull(io);
-        this.metadata = Objects.requireNonNull(metadata);
+        this.pvio = plugin.getPVIO();
+        this.metadata = plugin.getMetadataManager();
     }
 
     /**

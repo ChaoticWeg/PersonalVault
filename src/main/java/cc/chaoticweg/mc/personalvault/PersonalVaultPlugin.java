@@ -5,6 +5,8 @@ import cc.chaoticweg.mc.personalvault.events.InventoryCloseListener;
 import cc.chaoticweg.mc.personalvault.events.PlayerLoginListener;
 import cc.chaoticweg.mc.personalvault.events.PlayerQuitListener;
 import cc.chaoticweg.mc.personalvault.serialization.PVIO;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,20 +15,29 @@ import java.util.logging.Logger;
 
 public class PersonalVaultPlugin extends JavaPlugin {
 
+    private static PersonalVaultPlugin Instance;
+
+    public static PersonalVaultPlugin getInstance() {
+        return Instance;
+    }
+
+    public static final String MessagePrefix = "[PV]";
+
     private final Logger logger;
     private final PVIO pvio;
 
-    private final MetadataManager metadata;
     private final VaultManager vaults;
+    private final MetadataManager metadata;
 
     public PersonalVaultPlugin() {
         super();
+        Instance = this;
 
         this.logger = this.getLogger();
-        this.pvio = new PVIO(this.getDataFolder(), this.getLogger());
+        this.pvio = new PVIO(this);
 
-        this.metadata = new MetadataManager(this);
-        this.vaults = new VaultManager(this, this.pvio, this.metadata);
+        this.metadata = new MetadataManager();
+        this.vaults = new VaultManager();
     }
 
     @Override
@@ -56,10 +67,22 @@ public class PersonalVaultPlugin extends JavaPlugin {
         return this.vaults;
     }
 
-    @SuppressWarnings("unused")
     @NotNull
     public MetadataManager getMetadataManager() {
         return this.metadata;
+    }
+
+    @NotNull
+    public PVIO getPVIO() {
+        return this.pvio;
+    }
+
+    public void sendMessage(@NotNull CommandSender player, String message, ChatColor color) {
+        player.sendMessage(color + String.format("%s %s", MessagePrefix, message) + ChatColor.RESET);
+    }
+
+    public void sendError(@NotNull CommandSender player, String message) {
+        this.sendMessage(player, message, ChatColor.RED);
     }
 
 }

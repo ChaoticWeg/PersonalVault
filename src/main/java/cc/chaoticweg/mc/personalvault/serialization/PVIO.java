@@ -1,5 +1,6 @@
 package cc.chaoticweg.mc.personalvault.serialization;
 
+import cc.chaoticweg.mc.personalvault.PersonalVaultPlugin;
 import cc.chaoticweg.mc.personalvault.util.InventoryUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.Inventory;
@@ -17,6 +18,14 @@ public class PVIO {
 
     private final File inventoriesFolder;
     private final Logger logger;
+
+    public PVIO() {
+        this(Objects.requireNonNull(PersonalVaultPlugin.getInstance()));
+    }
+
+    public PVIO(@NotNull PersonalVaultPlugin plugin) {
+        this(plugin.getDataFolder(), plugin.getLogger());
+    }
 
     public PVIO(@NotNull File pluginDataFolder, @NotNull Logger pluginLogger) {
         File dataFolder = Objects.requireNonNull(pluginDataFolder);
