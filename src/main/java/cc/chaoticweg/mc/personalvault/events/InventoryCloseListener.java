@@ -1,7 +1,6 @@
 package cc.chaoticweg.mc.personalvault.events;
 
 import cc.chaoticweg.mc.personalvault.VaultManager;
-import org.bukkit.GameMode;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,13 +26,13 @@ public class InventoryCloseListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity human = event.getPlayer();
         if (!(human instanceof Player)) {
-            // this isn't a player closing an inventory, so ignore it
+            // This isn't a player closing an inventory, so ignore it
             return;
         }
 
         Player player = (Player) human;
         if (!this.vaults.isViewing(player)) {
-            // the player is not viewing their vault, ignore
+            // The player is not viewing their vault, ignore
             return;
         }
 
