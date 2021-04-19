@@ -3,13 +3,10 @@ package cc.chaoticweg.mc.personalvault;
 import cc.chaoticweg.mc.personalvault.serialization.PVIO;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.data.type.Lectern;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -64,7 +61,7 @@ public class VaultManager {
      * Save a player's inventory to the map and to file.
      *
      * @param player The player whose inventory we are saving
-     * @param src The inventory to save
+     * @param src    The inventory to save
      */
     private void save(@NotNull OfflinePlayer player, @NotNull Inventory src) {
         UUID uuid = Objects.requireNonNull(player).getUniqueId();
@@ -82,19 +79,11 @@ public class VaultManager {
      * @param target The player whose inventory will be shown
      */
     public void open(@NotNull Player player, @NotNull OfflinePlayer target) {
-        Inventory openableInventory = this.plugin.getServer().createInventory(player, InventoryType.PLAYER);
         Inventory vault = this.get(Objects.requireNonNull(target));
-
-        openableInventory.clear();
-        for (int i = 0; i < vault.getSize(); i++) {
-            ItemStack stack = vault.getItem(i);
-            if (stack != null) {
-                openableInventory.setItem(i, stack);
-            }
+        InventoryView view = player.openInventory(vault);
+        if (view != null) {
+            this.metadata.setViewing(player, target);
         }
-
-        player.openInventory(openableInventory);
-        this.metadata.setViewing(player, target);
     }
 
     /**
@@ -110,7 +99,7 @@ public class VaultManager {
      * Saves the player's inventory and closes it.
      *
      * @param player The player whose inventory we will save
-     * @param inv The inventory to save
+     * @param inv    The inventory to save
      */
     public void close(@NotNull Player player, @NotNull Inventory inv) {
         UUID targetUuid = this.metadata.getViewingTarget(player);
