@@ -34,8 +34,8 @@ public class PersonalVaultPlugin extends JavaPlugin {
         Instance = this;
 
         this.logger = this.getLogger();
-        this.pvio = new PVIO(this);
 
+        this.pvio = new PVIO();
         this.metadata = new MetadataManager();
         this.vaults = new VaultManager();
     }
