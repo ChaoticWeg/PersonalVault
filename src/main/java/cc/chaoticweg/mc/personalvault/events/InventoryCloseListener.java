@@ -37,11 +37,6 @@ public class InventoryCloseListener implements Listener {
             return;
         }
 
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            // the player is in creative mode, trying to save this inventory will break it
-            return;
-        }
-
         Inventory inv = event.getInventory();
         this.vaults.close(player, inv);
     }

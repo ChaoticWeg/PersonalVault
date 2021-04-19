@@ -1,16 +1,12 @@
 package cc.chaoticweg.mc.personalvault.serialization;
 
-import cc.chaoticweg.mc.personalvault.serialization.models.SerializableInventory;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -21,16 +17,12 @@ import java.util.logging.Logger;
 public class PVIO {
 
     private final File inventoriesFolder;
-
     private final Logger logger;
-    private final Gson gson;
 
     public PVIO(@NotNull File pluginDataFolder, @NotNull Logger pluginLogger) {
         File dataFolder = Objects.requireNonNull(pluginDataFolder);
         this.inventoriesFolder = new File(dataFolder, "inventories");
-
         this.logger = Objects.requireNonNull(pluginLogger);
-        this.gson = new GsonBuilder().create();
     }
 
     /**
@@ -45,19 +37,17 @@ public class PVIO {
     }
 
     /**
-     * Initialize a player's vault by creating a new one and saving it to file before returning it.
+     * Initialize a player's vault by creating a new one and saving it to file.
      *
      * @param player The player whose vault we are initializing
-     * @return An empty {@link Inventory} after it is saved to file
      */
-    private Inventory initializeInventory(@NotNull OfflinePlayer player) {
+    private void initializeInventory(@NotNull OfflinePlayer player) {
         OfflinePlayer owner = Objects.requireNonNull(player);
 
         logger.info("Initializing inventory for " + owner.getName());
 
-        Inventory result = InventoryAdapter.createInventory();
-        saveInventory(owner, result);
-        return result;
+        Inventory result = Bukkit.getServer().createInventory(owner.getPlayer(), InventoryType.CHEST);
+        this.saveInventory(owner, result);
     }
 
     /**
@@ -87,13 +77,12 @@ public class PVIO {
         UUID uuid = Objects.requireNonNull(nnUuid);
         File dataFile = this.getInventoryFile(uuid);
 
-        // try to serialize and write to file
-        try (FileWriter out = new FileWriter(dataFile)) {
-            SerializableInventory inventory = new SerializableInventory(inv);
-            gson.toJson(inventory, SerializableInventory.class, out);
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
+        try {
+            String data = Base64.serializeInventory(inv);
+            PVIO.writeFile(dataFile, data);
+        } catch (Exception e) {
+            this.logger.warning("Unable to save inventory");
+            e.printStackTrace();
         }
     }
 
@@ -121,26 +110,17 @@ public class PVIO {
         this.checkInventory(owner);
 
         logger.fine("Loading inventory for " + owner.getName());
+        Inventory inv = Bukkit.getServer().createInventory(null, InventoryType.CHEST);
 
-        File dataFile = this.getInventoryFile(owner.getUniqueId());
-        try (FileReader in = new FileReader(dataFile)) {
-            SerializableInventory src = gson.fromJson(in, SerializableInventory.class);
-            return src.deserialize();
-        }
-
-        // we shouldn't catch any NPEs because they are handled down the chain
-        // who knows though, my code is shit
-        catch (NullPointerException e) {
-            logger.warning("Inventory for " + owner.getName() + " is corrupt, creating a new one");
-            return this.initializeInventory(owner);
-        }
-
-        // caught a different error. hm.
-        catch (Exception e) {
-            logger.severe("Unable to load inventory for " + owner.getName() + ": " + e.getClass().getSimpleName());
+        try {
+            File dataFile = this.getInventoryFile(owner.getUniqueId());
+            inv = PVIO.readFile(dataFile);
+        } catch (IOException e) {
+            this.logger.warning("Unexpected IOException occurred while reading the inventory file for " + player.getName());
             e.printStackTrace();
-            return this.initializeInventory(owner);
         }
+
+        return inv;
     }
 
     /**
@@ -151,8 +131,30 @@ public class PVIO {
      */
     @NotNull
     private File getInventoryFile(@NotNull UUID uuid) {
-        String filename = Objects.requireNonNull(uuid) + ".json";
+        String filename = Objects.requireNonNull(uuid) + "_b64.txt";
         return new File(this.inventoriesFolder, filename);
+    }
+
+    private static void writeFile(@NotNull File file, @NotNull String data) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(data);
+        }
+    }
+
+    private static Inventory readFile(@NotNull File file) throws IOException {
+        String data = PVIO.readRawFile(file);
+        return Base64.deserializeInventory(data);
+    }
+
+    private static String readRawFile(@NotNull File file) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            return sb.toString();
+        }
     }
 
 }

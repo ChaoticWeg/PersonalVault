@@ -86,8 +86,11 @@ public class VaultManager {
         Inventory vault = this.get(Objects.requireNonNull(target));
 
         openableInventory.clear();
-        for (ItemStack stack : vault.getContents()) {
-            openableInventory.addItem(stack);
+        for (int i = 0; i < vault.getSize(); i++) {
+            ItemStack stack = vault.getItem(i);
+            if (stack != null) {
+                openableInventory.setItem(i, stack);
+            }
         }
 
         player.openInventory(openableInventory);

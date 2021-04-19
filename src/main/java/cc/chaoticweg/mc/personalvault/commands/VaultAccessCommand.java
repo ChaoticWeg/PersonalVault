@@ -44,13 +44,6 @@ public class VaultAccessCommand extends PersonalVaultCommand {
             return true;
         }
 
-        // Check that the player is not in creative mode, which seems to break something.
-        // TODO look into why creative mode seems to break PV
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            player.sendMessage(ChatColor.RED + "[PV] /pv is not available in creative mode." + ChatColor.RESET);
-            return true;
-        }
-
         // If no args, attempt to open the player's own vault
         if (args.length == 0) {
             this.vaults.open(player);

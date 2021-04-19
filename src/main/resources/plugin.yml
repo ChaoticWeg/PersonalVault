@@ -2,8 +2,9 @@ main: cc.chaoticweg.mc.personalvault.PersonalVaultPlugin
 prefix: PV
 
 name: PersonalVault
-version: 1.1.2-hotfix-3
+version: 1.2.0
 author: ChaoticWeg
+api-version: 1.16
 
 description: Provides a personal vault that can be accessed from anywhere.
 
