@@ -26,13 +26,13 @@ public class InventoryCloseListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity human = event.getPlayer();
         if (!(human instanceof Player)) {
-            // this isn't a player closing an inventory, so ignore it
+            // This isn't a player closing an inventory, so ignore it
             return;
         }
 
         Player player = (Player) human;
         if (!this.vaults.isViewing(player)) {
-            // the player is not viewing their vault, ignore
+            // The player is not viewing their vault, ignore
             return;
         }
 

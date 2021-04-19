@@ -38,7 +38,7 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         // Check that the sender has permission to access vaults
         Player player = (Player) sender;
         if (!player.hasPermission("pv.access")) {
-            player.sendMessage("You don't have permission to access any vaults.");
+            this.plugin.sendError(player, "You don't have permission to access any vaults.");
             return true;
         }
 
@@ -51,7 +51,7 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         // If player name arg given, attempt to look up the OfflinePlayer by name and open their vault
         // Check that the sender has permission to access other players' vaults
         if (!player.hasPermission("pv.admin")) {
-            player.sendMessage("You don't have permission to access other players' vaults.");
+            this.plugin.sendError(player, "You don't have permission to access other players' vaults.");
             return true;
         }
 
@@ -65,7 +65,7 @@ public class VaultAccessCommand extends PersonalVaultCommand {
     }
 
     private boolean sendUsage(@NotNull CommandSender sender, @NotNull String alias, @NotNull String usage) {
-        sender.sendMessage(usage.replace("<alias>", alias));
+        this.plugin.sendError(sender, usage.replace("<alias>", alias));
         return true;
     }
 

@@ -15,11 +15,10 @@ import java.util.Objects;
 
 public abstract class PersonalVaultCommand implements CommandExecutor {
 
-    private final HashMap<String, CommandExecutor> subcommands = new HashMap<>();
-
-    private final PersonalVaultPlugin plugin;
-    private final PersonalVaultCommand parent;
-    private final String name;
+    protected final HashMap<String, CommandExecutor> subcommands = new HashMap<>();
+    protected final PersonalVaultPlugin plugin;
+    protected final PersonalVaultCommand parent;
+    protected final String name;
 
     PersonalVaultCommand(@NotNull PersonalVaultPlugin plugin, @NotNull String name, @Nullable PersonalVaultCommand parent) {
         this.plugin = Objects.requireNonNull(plugin);
@@ -87,6 +86,12 @@ public abstract class PersonalVaultCommand implements CommandExecutor {
             return this.getSubcommand(a[0]).onCommand(s, c, n, popFront(a));
         }
 
-        return this.execute(s, c, n, a);
+        try {
+            return this.execute(s, c, n, a);
+        } catch (Exception e) {
+            this.plugin.sendError(s, String.format("An unexpected %s occurred", e.getClass().getSimpleName()));
+            e.printStackTrace();
+            return true;
+        }
     }
 }

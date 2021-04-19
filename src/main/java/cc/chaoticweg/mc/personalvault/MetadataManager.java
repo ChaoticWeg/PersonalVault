@@ -20,6 +20,10 @@ class MetadataManager {
     private final PersonalVaultPlugin plugin;
     private final Logger logger;
 
+    MetadataManager() {
+        this(Objects.requireNonNull(PersonalVaultPlugin.getInstance()));
+    }
+
     MetadataManager(@NotNull PersonalVaultPlugin plugin) {
         this.plugin = Objects.requireNonNull(plugin);
         this.logger = plugin.getLogger();
