@@ -2,8 +2,6 @@ package cc.chaoticweg.mc.personalvault.commands;
 
 import cc.chaoticweg.mc.personalvault.PersonalVaultPlugin;
 import cc.chaoticweg.mc.personalvault.VaultManager;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -40,7 +38,7 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         // Check that the sender has permission to access vaults
         Player player = (Player) sender;
         if (!player.hasPermission("pv.access")) {
-            player.sendMessage(ChatColor.RED + "[PV] You don't have permission to access any vaults." + ChatColor.RESET);
+            this.plugin.sendError(player, "You don't have permission to access any vaults.");
             return true;
         }
 
@@ -53,7 +51,7 @@ public class VaultAccessCommand extends PersonalVaultCommand {
         // If player name arg given, attempt to look up the OfflinePlayer by name and open their vault
         // Check that the sender has permission to access other players' vaults
         if (!player.hasPermission("pv.admin")) {
-            player.sendMessage("You don't have permission to access other players' vaults.");
+            this.plugin.sendError(player, "You don't have permission to access other players' vaults.");
             return true;
         }
 
@@ -67,7 +65,7 @@ public class VaultAccessCommand extends PersonalVaultCommand {
     }
 
     private boolean sendUsage(@NotNull CommandSender sender, @NotNull String alias, @NotNull String usage) {
-        sender.sendMessage(usage.replace("<alias>", alias));
+        this.plugin.sendError(sender, usage.replace("<alias>", alias));
         return true;
     }
 

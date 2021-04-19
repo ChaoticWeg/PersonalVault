@@ -15,10 +15,10 @@ import java.util.Objects;
 
 public abstract class PersonalVaultCommand implements CommandExecutor {
 
-    private final HashMap<String, CommandExecutor> subcommands = new HashMap<>();
-    private final PersonalVaultPlugin plugin;
-    private final PersonalVaultCommand parent;
-    private final String name;
+    protected final HashMap<String, CommandExecutor> subcommands = new HashMap<>();
+    protected final PersonalVaultPlugin plugin;
+    protected final PersonalVaultCommand parent;
+    protected final String name;
 
     PersonalVaultCommand(@NotNull PersonalVaultPlugin plugin, @NotNull String name, @Nullable PersonalVaultCommand parent) {
         this.plugin = Objects.requireNonNull(plugin);
