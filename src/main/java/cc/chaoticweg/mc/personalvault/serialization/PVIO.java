@@ -46,7 +46,7 @@ public class PVIO {
 
         logger.info("Initializing inventory for " + owner.getName());
 
-        Inventory result = Bukkit.getServer().createInventory(owner.getPlayer(), InventoryType.CHEST);
+        Inventory result = Bukkit.getServer().createInventory(null, InventoryType.CHEST);
         this.saveInventory(owner, result);
     }
 

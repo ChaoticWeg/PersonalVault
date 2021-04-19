@@ -18,7 +18,6 @@ public final class Base64 {
         try (ByteArrayOutputStream byteOutStr = new ByteArrayOutputStream()) {
             BukkitObjectOutputStream objOutStr = new BukkitObjectOutputStream(byteOutStr);
 
-            objOutStr.writeInt(inventory.getSize());
             for (int i = 0; i < inventory.getSize(); i++) {
                 ItemStack stack = inventory.getItem(i);
                 if (stack != null) {
@@ -37,7 +36,7 @@ public final class Base64 {
     public static Inventory deserializeInventory(String data) throws IOException {
         try (ByteArrayInputStream byteInStr = new ByteArrayInputStream(Base64Coder.decodeLines(data))) {
             BukkitObjectInputStream objInStr = new BukkitObjectInputStream(byteInStr);
-            Inventory inventory = Bukkit.getServer().createInventory(null, objInStr.readInt());
+            Inventory inventory = Bukkit.getServer().createInventory(null, InventoryType.CHEST);
 
             while (objInStr.available() > 0) {
                 int index = objInStr.readInt();
